@@ -125,7 +125,7 @@ Execution order: `user_rules.json > agent_rules.json > version_rules.json`
 
 **Examples**:
 `user_rules.json`
-```json
+```js
 {
 	"field 1": {
 		"$modify": {
@@ -160,7 +160,7 @@ Execution order: `user_rules.json > agent_rules.json > version_rules.json`
 
 
 ### `version_rules.json`
-```json
+```js
 {
 	"field 1": {
 		"$modify": {
