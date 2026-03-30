@@ -293,16 +293,23 @@ Available commands:
 ---
 
 ## Installation
+### Debian package (recommended)
+Download the latest `.deb` from GitHub Releases and install it locally:
+```bash
+wget https://github.com/red-bean-pasta/config-weaver/releases/download/v0.2.0/config-weaver_0.2.0-1_all.deb
+sudo apt install ./config-weaver_0.2.0-1_all.deb
+```
+This method is recommended on Debian-based systems as it also installs the systemd service, environment file, and default configuration files.
+
 ### Install from GitHub with `pip`
 ```bash
 pip install git+https://github.com/red-bean-pasta/config-weaver.git
 ```
+
 ### Install from GitHub with `uv`
 ```bash
 uv tool install git+https://github.com/red-bean-pasta/config-weaver.git
 ```
-### Debian package
-[Currently not implemented]
 
 ---
 
