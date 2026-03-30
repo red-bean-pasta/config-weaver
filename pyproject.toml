@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sailor-tailor"
+version = "0.1.0"
+description = "Distributing configuration based on end client username and system type."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "pwdlib[argon2]>=0.3.0",
+]
+
+[project.scripts]
+sailor-tailor = "sailor_tailor.main:main"

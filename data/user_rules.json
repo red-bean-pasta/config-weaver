@@ -1,0 +1,140 @@
+{
+    "my rules": {
+    },
+    "$meta": {
+        "abbreviations": {
+            "$users": "Match request usernames. Can be set to true to apply to every user in the same group",
+            "$s / $selections": "Make selections within arrays. If not set, default to select everything",
+                "[identifier]: [elements]": [
+                    "[elements] can be an array, object, or even just a string to select only one value",
+                    "Object body provides a few handy snippets syntax:",
+                        "'identifier_value': 'new_value' => quick renaming",
+                        "'identifier_value': null => to skip renaming",
+                        "'identifier_value: { 'key': 'new_value' }' => key overriding",
+                    "Multiple identifier-elements pairs are allowed. Lower identifier select from previous result. For example, 'idf_2' select from 'idf_1' in '{[idf_1]: [elements], [idf_2]: [elements]}' "
+                ],
+                "[$operation]: [identifier]": [
+                    "Must be set. Must be '$union' for the first selection",
+                    "[$operation]: The set logical operation. Can be either '$union', '$intersection' or '$difference'",
+                    "[identifier]: The identifier to determine if two items should be considered duplicates "
+                ],
+            "$h / $placeholders": "Placeholder mappings. E.g., swap all '$DEFAULT' in values to 'Option A'",
+            "$m / $modifications": "Make modifications on the whole JSON document",
+                "$c / $conditions": "Check if values of certain keys match. Mismatches skip applying modifications. Conditions can be set at any nest level. Can't used on array",
+                "$p / $pointers": "If applied to non-array will wrap it as an array of only one item",
+                    "$q / $query": "Same as '$conditions'",
+                    "$i / $index": "Index to insert. 0 based. Default to 0. Use '-' to append",
+                "[$action]: [elements]": [
+                    "[$action]: Either '$+ / $insert', '$= / $assign', '$- / $remove' or '$> / $rename'. '>' rename the key, '=' and '-' operates on objects, while '+' manipluates array to insert or append items. Set '$-' to true to remove everything. If target is a non-array, '$+' wraps value insides an array first. Evaluation order: '$+', '$=', '$-' then '$>'",
+                    "[elements] examples:",
+                        "'$=': {'key_1': 'value_1'}",
+                        "'$-': ['key_1', 'key_2', 'key_3']",
+                        "'$+': ['value_1', 'value_2']",
+                        "'$>': {'key_1': 'new_key_1'} ",
+                    "Replacing and moving is not implemented. Comparing array as a whole is not supported"
+                ],
+            "$explanations": "For commenting. Skipped in processing "
+        },
+        "notes": [
+            "'meta' group is for keeping notes and ignored in processing.",
+            "Process order: '$selection' > '$modifications' > '$placeholders'."
+        ],
+        "plan": [
+            " :) "
+        ],
+        "example": {
+            "an example rule group": [
+                {
+                    "$u": "snow white",
+                    "$s": {
+                        "outbounds": [
+                            {
+                                "tag": {
+                                    "Singapore": null,
+                                    "Santiago": "Santiago Chile South America",
+                                    "Hanoi": {
+                                        "tag": "Hanoi Vietnam Asia",
+                                        "detour": "Singapore"
+                                    }
+                                },
+                                "tcp_multi_path": true,
+                                "$union": "tag"
+                            },
+                            {
+                                "udp_fragment": false,
+                                "$union": "tag"
+                            }
+                        ]
+                    },
+                    "$m": [
+                        {
+                            "$-": "dns",
+                            "$explanations": "Remove the whole 'dns' block"
+                        },
+                        {
+                            "inbounds": [
+                                {
+                                    "$c": { "type": "tun" },
+                                    "$=": {
+                                        "exclude_package": "com.queen.mirror"
+                                    }
+                                }
+                            ],
+                            "outbounds": [
+                                {
+                                    "$+": {
+                                        "$i": 0,
+                                        "$e": [
+                                            {
+                                                "tag": "Escape selector",
+                                                "type": "selector",
+                                                "outbounds": [
+                                                    "Singapore",
+                                                    "Los Angelas"
+                                                ],
+                                                "interrupt_exist_connections": true
+                                            },
+                                            {
+                                                "tag": "Till the world ends selector",
+                                                "type": "selector",
+                                                "outbounds": [
+                                                    "Brazzaville Congo Africa",
+                                                    "Hanoi Vietnam Asia",
+                                                    "Tirana Albania Europe"
+                                                ],
+                                                "interrupt_exist_connections": true
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "explanations": [
+                        "'$selections' is set. It first selects outbounds based on 'tag', with 'Singapore' as is, 'Santiago' renamed to 'Santiago Chile South America', and 'Hanoi''s tag overridden to 'Hanoi Vietnam Asia' and detour to 'Singapore'. It then select within for those with 'tcp_multi_path' set to true. It then selects from all outbounds again for those with 'udp_fragment' set to true, and union it with previous result based on 'tag'.",
+                        "Note that since 'Santiago' and 'Hanoi' have modified their tags, if they also have 'udp_fragment' set to true, the final result will have all 'Santiago Chile South America', 'Hanoi Vietnam Asia', 'Santiago' and 'Hanoi'. This is expected behavior.",
+                        "This also means you can achieve bulk copy. For example, overriding 'detour' and 'tag' to have 'Singapore to Hanoi' and 'Santiago to Hanoi'."
+                    ]
+                },
+                {
+                    "$u": [ "bashful", "doc", "dopey", "grumpy", "happy", "sleepy", "sneezy" ],
+                    "$explanations": "Since no '$selection' is specified, the seven dwarfs get them all"
+                }
+            ],
+            "another example rule group": {
+                "this is another tag in another group": {
+                    "$u": "queen",
+                    "$s": {
+                        "outbounds": {
+                            "$uq": true,
+                            "tag": [
+                                "Singapore",
+                                "Santiago"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

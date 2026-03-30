@@ -1,0 +1,22 @@
+[Unit]
+Description=Python backend that distributes proxy config tailored for client's username and system
+After=network.target
+Wants=network-online.target
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sailor-tailor
+Restart=on-failure
+RestartSec=5
+
+DynamicUser=yes
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target

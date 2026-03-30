@@ -1,0 +1,2 @@
+No rate limit capability built in. Recklessly binding to a public interface may attract DoS or DDoS attack! Use reverse proxy tools like Nginx or Caddy or firewall tools like Nftables or Iptables.
+(Python isn't the most efficient tool anyway, not to mention it's totally re-inventing the wheel :)

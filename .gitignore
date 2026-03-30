@@ -1,0 +1,12 @@
+.idea/
+__pycache__/
+.venv/
+
+/test/
+/archive/
+
+debian/.debhelper/
+debian/files
+debian/*.log
+debian/*.substvars
+debian/debhelper-build-stamp

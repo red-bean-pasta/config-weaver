@@ -1,0 +1,22 @@
+Source: sailor-tailor
+Section: net
+Priority: optional
+Maintainer: red-bean-pasta <red-bean-pasta@outlook.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ dh-python,
+ python3-all,
+ pybuild-plugin-pyproject,
+ python3-hatchling
+Standards-Version: 4.7.3
+Rules-Requires-Root: no
+
+Package: sailor-tailor
+Architecture: all
+Depends:
+ ${python3:Depends}
+ ${misc:Depends},
+Description: Distribute configuration based on username and platform.
+ System service that exposes a FastAPI endpoint to dynamically generate
+ per-user proxy configuration based on platform rules and templates.
+ Designed to be used behind a reverse proxy such as Caddy.

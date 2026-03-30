@@ -1,0 +1,19 @@
+{
+    acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+}
+
+https://internal.example.com:9090 {
+
+    @cfg path_regexp main ^/cfs/((ios|android|macos|tvos|windows|linux)/)?this-is-an-example-secret-dont-use-it-directly-tFyQyU5FmJrglAepgPKJdnRpTykcvazNiFXtKNWuJA77
+
+    handle @cfg {
+        basicauth {
+            someone $2a$14$63EE8jXwmebmTDhvyYvoL.OgV6LgKoFFYWK3gs86btg85RW6enLK2
+        }
+
+        reverse_proxy 127.0.0.1:9595
+    }
+
+    respond 403
+
+}

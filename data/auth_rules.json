@@ -1,0 +1,45 @@
+{
+    "group":{
+        "basic": {
+            "sufficient": {},
+            "required": {},
+            "optional": {},
+            "disabled": {},
+            "reject": {}
+        },
+        "bearer": {
+        },
+        "secret": {
+        }
+    },
+    "$meta": {
+        "notes": [
+            "The authentication system is built with the most simple client in mind, who can only do simple GET request without customizing header, not to mention public key scehma.",
+            "Therefore, client authenticates with the very first request. The request must be TLS encrypted, else everything is exposed to the Internet in plaintext.",
+
+            "Three methods are supported: Authorization header bearer, Basic Authorization and secret in URL path.",
+            "Basic and header should be stored in hashed format in this file. Hash with command `[path_to_this_app] hash [the_credential_in_plaintext]`. Hash disables attackers from guessing the actual credential even if they obtain the auth rules file. Secret doesn't benefit much from hashing and should be stored in plaintext. Therefore, secret should always be used together with basic or header.",
+            "Besides these three, because base file on server should always be encrypted, the decryption key should also be sent by client. This can be considered a second layer of protection. Despite the key being shared, and the design being less-than-ideal, it prevents attackers from decrypting the base file, even if they obtain physical access to the server, such as a compromised hosting provider. However, the data can exist decrypted in the server's RAM during reference time. This is unavoidable unless decryption is offloaded to client side. Again, imposible due to client limitation.",
+            "It's always recommended to use the Authorization header wherever possible, e.g., curl -H 'Authorization: [beaer]' -H 'X-Request-ID: [encryption key]'. Header 'X-Request-ID' is used instead of 'Encryption-Key' or 'X-Encryption-Key' for not too attention-grabbing.",
+            "Yet considering the limitations of many clients, it's also possible to auth via Basic Authorization and URL secret. Both basic auth credentials and secret live in the HTTP address: `https://username:password@example.com/group_name/platform/version/secret/decryption_key`. They require no extra support on client side, as long as the client doesn't intentionally block basic auth. Yet living in URL alsoallows easy copy and paste therefore leak by unknowing users, which is why they should be avoided if possible.",
+            "It's impossible to unspecify platform, version or secret if not using header without causing ambiguity: Is it '/group_name/platform/decryption_key' or '/group_name/version/decryption_key'? It's recommended to always use basic auth and secret together anyway. To unspecify platform, simply use an undefined keyword like 'default'.",
+
+            "Six policies are defined, prioritized from the top down: ",
+                "Breached: Reject if matched, useful in recording credentials leaked in plaintext request;",
+                "Reject: Reject if matched, useful in catching leaked request;",
+                "Disabled / Optional: No effect if matched, useful in migration;",
+                "Sufficient: Consider authed if matched;",
+                "Required: Consider authed only if all required methods under the same group are present and valid.",
+            "Any unmatched credential will be considered `Reject` and overrules `Sufficient` or `Required`.",
+            "Note that one method under one group cannot have one user appear in different policies, else policy appears later overwrites. This is because with credentials stored in hash, send-in credential can't be evaluated multiple times without causing timing difference which attackers can exploit.",
+            "It's worth mentioning the authorization process takes constant time, whether the request bears no credential, no decryption key, or credentials for all methods. This disables timing attack.",
+
+            "However, there's nothing that stops clients from accidentally send requests in plaintext HTTP. While they are always rejected, the credentials are already EXPOSED to the internet. Therefore, the service still validates plaintext requests and revoke any exposed credential.",
+            "The revoke doesn't indiscriminate group, method, policy or username. For example, if user-a under group A uses '$argon2id...NR8Q' for header auth of policy sufficient, and user-b under group B uses the same hashed text for basic auth of policy required, when user-a send plaintext request, both will be revoked. This is a fail-safe as group and username is usually much shorter and much more predictable, too easy to exploit. Like here, attackers can eaisly guess there's user-b after user-a. It also stops attackers from trying e.g., header credential in basic auth.",
+            "The revoke is recorded to disk and persists after service restart.",
+            "However, revoke is based on hashed text, which means if two different looking hash actually shares the same underlying text, it's cryptographically impossible to link them and revoke cleanly. ",
+            "Thence, it's highly recommended to have different credentials for different users, else one HTTP request will disable all the other users.",
+            "The service also validates exposed decryption key and logs a warning if exposed. But decryption key cannot be revoked with interrupting all users. While revoking user credentials should already stop attacker, one should rotate the decryption key as soon as possible."
+        ]
+    }
+}
