@@ -1,11 +1,14 @@
-from typing import Callable
+from typing import Callable, TypeVar
 
 from config_weaver.patch.base.spec import PatchNode
 from config_weaver.utils.json_helper import JsonValue
 from pydantic import BaseModel
 
 
-def parse[T: BaseModel](
+T = TypeVar("T", bound=BaseModel)
+
+
+def parse(
         node_type: type[PatchNode],
         spec: str | bytes,
         qualifier: Callable[[JsonValue, T], bool],
@@ -15,7 +18,7 @@ def parse[T: BaseModel](
     return _qualify_node(value, node, qualifier)
 
 
-def _qualify_node[T: BaseModel](
+def _qualify_node(
         value: JsonValue,
         node: PatchNode,
         qualifier: Callable[[JsonValue, T], bool],

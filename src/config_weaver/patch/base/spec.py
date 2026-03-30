@@ -1,4 +1,4 @@
-from typing import Any, Callable
+from typing import Any, Callable, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
 
@@ -20,7 +20,7 @@ class PatchNode(BaseModel):
     modify: list[Modify] | None = Field(default=None, alias='$modify')
     insert: list[Insert] | None = Field(default=None, alias='$insert')
 
-    children: dict[str, PatchNode] = Field(default_factory=dict, alias='$children')
+    children: dict[str, Self] = Field(default_factory=dict, alias='$children')
 
     @model_validator(mode='before')
     @classmethod

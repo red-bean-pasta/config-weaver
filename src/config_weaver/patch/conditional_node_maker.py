@@ -1,12 +1,13 @@
-from __future__ import annotations
-
 from copy import copy
-from typing import Any
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, create_model
 
 from config_weaver.patch.base.schemas import Select, Filter, Modify, Insert
 from config_weaver.patch.base.spec import PatchNode
+
+
+T = TypeVar('T', bound=BaseModel)
 
 
 def make(
@@ -45,7 +46,7 @@ def _make_directives(
     )
 
 
-def _make_model[T: BaseModel](
+def _make_model(
         base: type[T],
         mixin: type[BaseModel],
 ) -> type[T]:
