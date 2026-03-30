@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /opt/config-weaver/venv/bin/config-weaver "$@"
+exec /opt/config-weaver/bin/config-weaver "$@"
