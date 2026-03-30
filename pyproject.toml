@@ -8,7 +8,7 @@ dependencies = [
     "pydantic",
     "fastapi",
     "uvicorn",
-    "pwdlib[argon2]",
+    "argon2-cffi",
     "cryptography",
     "packaging",
     "portalocker",
