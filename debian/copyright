@@ -1,6 +1,8 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: sailor-tailor
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0
+Source: https://github.com/red-bean-pasta/config-weaver/
+Upstream-Name: config-weaver
 
 Files: *
 Copyright: 2026 red-bean-pasta
 License: MIT
+  See /usr/share/common-licenses/MIT

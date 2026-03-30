@@ -1,0 +1,10 @@
+{
+    "c-u-next-tuesday": {
+        "$modify": {
+            "$user": ["shapeshifter", "hype-boy"],
+            "$assign": {
+                "enable": true
+            }
+        }
+    }
+}

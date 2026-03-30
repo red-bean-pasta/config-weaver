@@ -1,17 +1,25 @@
+[project]
+name = "config_weaver"
+version = "0.2.0"
+description = "A lightweight config distribution service with document-level JSON patching, enabling dynamic, server-side transformation and delivery using minimal, GET-only clients"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic",
+    "fastapi",
+    "uvicorn",
+    "pwdlib[argon2]",
+    "cryptography",
+    "packaging",
+    "portalocker",
+]
+
+[project.scripts]
+config_weaver = "config_weaver.__main__:main"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[project]
-name = "sailor-tailor"
-version = "0.1.0"
-description = "Distributing configuration based on end client username and system type."
-requires-python = ">=3.11"
-dependencies = [
-  "fastapi",
-  "uvicorn",
-  "pwdlib[argon2]>=0.3.0",
-]
-
-[project.scripts]
-sailor-tailor = "sailor_tailor.main:main"
+[tool.uv]
+package = true

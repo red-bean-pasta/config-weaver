@@ -1,8 +1,0 @@
-data/env    etc/sailor-tailor
-data/base.json    etc/sailor-tailor/
-data/user_rules.json    etc/sailor-tailor/
-data/agent_platform_dict.json    etc/sailor-tailor/
-data/platform_rules.json    etc/sailor-tailor/
-data/templates/*    etc/sailor-tailor/templates/
-data/sailor-tailor.service  usr/lib/systemd/system/
-

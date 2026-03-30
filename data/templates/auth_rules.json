@@ -1,10 +1,9 @@
 {
     "promiscuous-boy": {
-        "bearer": "$argon2id$v=19$m=65536,t=3,p=3$HROXWScSJRf1q+lD0Jtt/g$vnR12WbW1R7Dj2N1t87UiNczJ/f2GXlppzNXEnmNtbI",
-        "basic": "$argon2id$v=19$m=65536,t=3,p=3$NBxVVzhlb7eWbKL/WSZM6Q$4NChluS9qCc3ET/p5Ime+Hhkaq/4Gm9s6zrbt7/NR8Q"
+        "bearer": "$argon2id$v=19$m=65536,t=3,p=3$F7AC...",
+        "basic": "$argon2id$v=19$m=65536,t=3,p=3$WvA2..."
     },
     "the-black-dog": {
-        "bearer": "$argon2id$v=19$m=65536,t=3,p=3$bagnYfkmlvTcvQbrXzr0xQ$rO+ff1p9T9gDwIbMIYuHmQc0G/beP5dLCEXEFGD4xPw",
-        "basic": "$argon2id$v=19$m=65536,t=3,p=3$JiFh9ukx1VV//EuLRsqZPw$ePVz3m9e8H/noYbXp7gj0pXp8TOr5GYJ1tuBHdBNBDc"
+        "bearer": "$argon2id$v=19$m=65536,t=3,p=3$zGrq..."
     }
 }

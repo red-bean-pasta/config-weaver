@@ -1,12 +1,23 @@
+# Python-generated files
 .idea/
 __pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
 .venv/
 
-/test/
 /archive/
+/test/
+
 
 debian/.debhelper/
 debian/files
+debian/*.buildinfo
+debian/*.changes
 debian/*.log
 debian/*.substvars
 debian/debhelper-build-stamp

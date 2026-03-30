@@ -1,7 +1,8 @@
-Source: sailor-tailor
+Source: config-weaver
 Section: net
 Priority: optional
 Maintainer: red-bean-pasta <red-bean-pasta@outlook.com>
+Homepage: https://github.com/red-bean-pasta/config-weaver
 Build-Depends:
  debhelper-compat (= 13),
  dh-python,
@@ -11,12 +12,15 @@ Build-Depends:
 Standards-Version: 4.7.3
 Rules-Requires-Root: no
 
-Package: sailor-tailor
+Package: config-weaver
 Architecture: all
 Depends:
- ${python3:Depends}
- ${misc:Depends},
-Description: Distribute configuration based on username and platform.
- System service that exposes a FastAPI endpoint to dynamically generate
- per-user proxy configuration based on platform rules and templates.
- Designed to be used behind a reverse proxy such as Caddy.
+ ${python3:Depends},
+ ${misc:Depends}
+Description: JSON config distribution service with rule-based patching
+ config-weaver distributes JSON configuration from an encrypted base
+ file and applies optional patch rules based on user, client agent,
+ and version.
+ .
+ It provides both a CLI and a FastAPI service, and is intended for
+ simple GET-only clients and reverse-proxy deployments.

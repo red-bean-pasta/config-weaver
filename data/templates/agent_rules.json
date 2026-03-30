@@ -1,0 +1,10 @@
+{
+    "drivers-license": {
+        "$modify": {
+            "$agent": ["BirdsOfAFeather", "LOML"],
+            "$assign": {
+                "enable": true
+            }
+        }
+    }
+}
