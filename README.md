@@ -302,7 +302,7 @@ pip install git+https://github.com/red-bean-pasta/config-weaver.git
 uv tool install git+https://github.com/red-bean-pasta/config-weaver.git
 ```
 ### Debian package
-A Debian package may also be provided for direct installation outside a Debian repository.
+[Currently not implemented]
 
 ---
 

@@ -6,16 +6,15 @@ Homepage: https://github.com/red-bean-pasta/config-weaver
 Build-Depends:
  debhelper-compat (= 13),
  dh-python,
- python3-all,
- pybuild-plugin-pyproject,
- python3-hatchling
+ dh-virtualenv,
+ python3,
+ python3-venv
 Standards-Version: 4.7.3
 Rules-Requires-Root: no
 
 Package: config-weaver
 Architecture: all
 Depends:
- ${python3:Depends},
  ${misc:Depends}
 Description: JSON config distribution service with rule-based patching
  config-weaver distributes JSON configuration from an encrypted base

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/config-weaver/venv/bin/config-weaver "$@"

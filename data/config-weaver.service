@@ -7,7 +7,9 @@ StartLimitIntervalSec=60
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/config-weaver
+EnvironmentFile=/etc/config-weaver/config-weaver.env
+WorkingDirectory=/opt/config-weaver
+ExecStart=/opt/config-weaver/venv/bin/config-weaver serve
 Restart=on-failure
 RestartSec=5
 
