@@ -1,6 +1,7 @@
 import copy
 import json
-from typing import Iterable, TypeAlias, TYPE_CHECKING, TypeAliasType
+from typing import Iterable, TypeAlias, TYPE_CHECKING
+from typing_extensions import TypeAliasType
 
 
 JsonScalar: TypeAlias = str | int | float | bool | None
