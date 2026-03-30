@@ -12,6 +12,7 @@ dependencies = [
     "cryptography",
     "packaging",
     "portalocker",
+    "typing_extensions"
 ]
 
 [project.scripts]

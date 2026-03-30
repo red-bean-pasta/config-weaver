@@ -1,10 +1,21 @@
 import copy
 import json
-from typing import Iterable, TypeAlias
+from typing import Iterable, TypeAlias, TYPE_CHECKING, TypeAliasType
+
 
 JsonScalar: TypeAlias = str | int | float | bool | None
-JsonValue: TypeAlias = JsonScalar | list["JsonValue"] | dict[str, "JsonValue"]
-JsonObject: TypeAlias = dict[str, JsonValue]
+if TYPE_CHECKING:
+    JsonValue: TypeAlias = JsonScalar | list["JsonValue"] | dict[str, "JsonValue"]
+    JsonObject: TypeAlias = dict[str, JsonValue]
+else: # Pydantic can't reliably build model with TypeAlias
+    JsonValue = TypeAliasType(
+        "JsonValue",
+        "JsonScalar | list[JsonValue] | dict[str, JsonValue]",
+    )
+    JsonObject = TypeAliasType(
+        "JsonObject",
+        "dict[str, JsonValue]",
+    )
 
 
 def dump_readable(v: dict) -> str:
