@@ -1,6 +1,6 @@
 import anyio
 from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError, InvalidHashError
+from argon2.exceptions import VerifyMismatchError, InvalidHash
 
 
 HASHER = PasswordHasher(
@@ -27,5 +27,5 @@ async def dummy_verify() -> None:
 def _verify_hash_sync(secret: str, secret_hash: str) -> bool:
     try:
         return HASHER.verify(secret_hash, secret)
-    except (VerifyMismatchError, InvalidHashError):
+    except (VerifyMismatchError, InvalidHash):
         return False
