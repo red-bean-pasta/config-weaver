@@ -67,7 +67,7 @@ class AuthManager:
         return strs.pop() if len(strs) == 1 else None
 
 
-@dataclass(slots=True)
+@dataclass()
 class AuthRules(FileData):
     _rules: dict[str, dict[Method, str]] = field(init=False) # User-Method-hash
 
@@ -96,7 +96,6 @@ class RevokeRecord:
     _credentials: set[str] = field(init=False) # in hash
 
     def __post_init__(self) -> None:
-        super().__init__()
         text = file_operator.read_text(self.path)
         self._credentials = {l.strip() for l in text.splitlines()} if text else {}
 
