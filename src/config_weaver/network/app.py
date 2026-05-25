@@ -15,7 +15,18 @@ UNSAFE_MODE_ENV = f"_{APP_ABBR}_UNSAFE_MODE"
 LOG_LEVEL_ENV = f"_{APP_ABBR}_LOG_LEVEL"
 
 
+logger = logging.getLogger(__name__)
+
+
 def create() -> FastAPI:
+    try:
+        return _create()
+    except Exception:
+        logger.exception("Failed to create ASGI app")
+        raise
+
+
+def _create() -> FastAPI:
     _initialize_logging()
 
     app = FastAPI()
