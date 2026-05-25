@@ -4,8 +4,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator, field_valida
 
 import config_weaver.patch.base.filter as strain
 from config_weaver.utils.json_helper import JsonValue, as_list
-from config_weaver.patch.base import selector, modifier, inserter
-from config_weaver.patch.base.schemas import Select, Filter, Modify, Insert
+from config_weaver.patch.base import selector, modifier, inserter, replacer
+from config_weaver.patch.base.schemas import Select, Filter, Replace, Modify, Insert
 
 
 class PatchNode(BaseModel):
@@ -17,6 +17,7 @@ class PatchNode(BaseModel):
 
     filter: list[Filter] | None = Field(default=None, alias='$filter')
     select: list[Select] | None = Field(default=None, alias='$select')
+    replace: list[Replace] | None = Field(default=None, alias='$replace')
     modify: list[Modify] | None = Field(default=None, alias='$modify')
     insert: list[Insert] | None = Field(default=None, alias='$insert')
 
@@ -31,7 +32,7 @@ class PatchNode(BaseModel):
         children: dict[str, Any] = {}
         normalized: dict[str, Any] = {}
         for key, value in data.items():
-            if key in ['$filter', '$select', '$modify', '$insert']:
+            if key in ['$filter', '$select', '$replace', '$modify', '$insert']:
                 normalized[key] = value
             else:
                 children[key] = value
@@ -40,7 +41,7 @@ class PatchNode(BaseModel):
 
         return normalized
 
-    @field_validator('select', 'filter', 'modify', 'insert', mode='before')
+    @field_validator('select', 'replace', 'filter', 'modify', 'insert', mode='before')
     @classmethod
     def _normalize_single_field(cls, value) -> list[JsonValue] | None:
         return as_list(value)
@@ -48,6 +49,7 @@ class PatchNode(BaseModel):
     ordered_directives: dict[str, Callable[[list[BaseModel], JsonValue], JsonValue]] = {
         'filter': strain.apply_filters,
         'select': selector.apply_selects,
+        'replace': replacer.apply_replaces,
         'modify': modifier.apply_modifies,
         'insert': inserter.apply_inserts,
     }

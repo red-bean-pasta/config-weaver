@@ -3,7 +3,7 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel, create_model
 
-from config_weaver.patch.base.schemas import Select, Filter, Modify, Insert
+from config_weaver.patch.base.schemas import Select, Filter, Replace, Modify, Insert
 from config_weaver.patch.base.spec import PatchNode
 
 
@@ -15,10 +15,11 @@ def make(
 ) -> type[PatchNode]:
     name = f"{_get_prefix(mixin)}{PatchNode.__name__}"
 
-    filter_type, select_type, modify_type, insert_type = tuple(_make_directives(mixin))
+    filter_type, select_type, replace_type, modify_type, insert_type = tuple(_make_directives(mixin))
     fields = {
         'filter': list[filter_type] | None,
         'select': list[select_type] | None,
+        'replace': list[replace_type] | None,
         'modify': list[modify_type] | None,
         'insert': list[insert_type] | None,
         'children': f"dict[str, {name}] | None",
@@ -39,10 +40,10 @@ def make(
 
 def _make_directives(
         mixin: type[BaseModel],
-) -> tuple[type[Filter], type[Select], type[Modify], type[Insert]]:
+) -> tuple[type[Filter], type[Select], type[Replace], type[Modify], type[Insert]]:
     return tuple(
         _make_model(d, mixin)
-        for d in (Filter, Select, Modify, Insert)
+        for d in (Filter, Select, Replace, Modify, Insert)
     )
 
 

@@ -19,8 +19,10 @@ def build(
 
     logger.info(f"Decrypting config...")
     decrypted = config_manager.decrypt(encryption_key)
+
     logger.info(f"Parsing config...")
     parsed = json.loads(decrypted)
+
     logger.info(f"Patching config...")
     patched = patch_manager.patch(param, parsed)
 

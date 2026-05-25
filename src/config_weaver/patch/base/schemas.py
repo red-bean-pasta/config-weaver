@@ -152,3 +152,22 @@ class Modify(BaseModel):
         if is_object and is_array:
             raise SpecError('$if and $not cannot be used together with $to in $modify')
         return self
+
+
+class Replace(BaseModel):
+    model_config = _model_config
+
+    from_: list[str] = Field(alias='$from')
+    to: JsonValue = Field(alias='$to')
+    recursive: bool = Field(default=False, alias='$recursive')
+
+    @field_validator('from_', mode='before')
+    @classmethod
+    def _normalize_single_field(cls, value) -> list[JsonValue] | None:
+        if isinstance(value, str):
+            return as_list(value)
+        if not isinstance(value, list):
+            raise SpecError(f'Invalid $from: Unexpected type: {type(value)}: Only string or string list is allowed')
+        if not all(isinstance(i, str) for i in value):
+            raise SpecError(f"Invalid $from: Only string element is allowed")
+        return value
