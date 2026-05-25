@@ -72,7 +72,6 @@ async def _auth(
 
 
 async def _verify_hash(cred: str, hashed: str) -> bool:
-    print(f"cred: {cred}, hashed: {hashed}")
     return await hasher.verify_hash(cred, hashed)
 
 
