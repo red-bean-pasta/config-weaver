@@ -1,3 +1,10 @@
+config-weaver (0.3.0-1) unstable; urgency=medium
+
+  * Add placeholder replacement support.
+  * Fix stealth fallback.
+
+ -- red-bean-pasta <red-bean-pasta@outlook.com>  Sun, 25 May 2026 20:00:00 +0000
+
 config-weaver (0.2.0-1) unstable; urgency=medium
 
   * Refactor patch format.
