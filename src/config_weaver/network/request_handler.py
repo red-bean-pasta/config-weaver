@@ -17,29 +17,34 @@ logger = logging.getLogger(__name__)
 
 @router.get("/{full_path:path}")
 async def auth_and_build_config(request: Request):
-    parsed = await request_parser.parse(request)
-    auth_result = await _auth(request.app.state.auth_manager, parsed.bearer_creds, parsed.basic_creds)
-    decrypt_result = _decrypt(request.app.state.config_manager, parsed.encryption_key or "\0")
-    if not auth_result:
-        logger.info("Invalid request: Failed authentication")
-        return http_helper.get_uniform_reject()
-    logger.debug("Request passed authentication")
-    if not decrypt_result:
-        logger.info("Invalid request: Failed config decryption")
-        return http_helper.get_uniform_reject()
-    logger.debug("Request decrypted config")
+    try:
+        parsed = await request_parser.parse(request)
+        auth_result = await _auth(request.app.state.auth_manager, parsed.bearer_creds, parsed.basic_creds)
+        decrypt_result = _decrypt(request.app.state.config_manager, parsed.encryption_key or "\0")
+        if not auth_result:
+            logger.info("Invalid request: Failed authentication")
+            return http_helper.get_uniform_reject()
+        logger.debug("Request passed authentication")
+        if not decrypt_result:
+            logger.info("Invalid request: Failed config decryption")
+            return http_helper.get_uniform_reject()
+        logger.debug("Request decrypted config")
 
-    user = auth_result
-    config = json.loads(decrypt_result)
+        user = auth_result
+        config = json.loads(decrypt_result)
 
-    param = PatchParam(user, parsed.agent, parsed.version)
-    patch_manager: PatchManager = request.app.state.patch_manager
-    result = patch_manager.patch(param, config)
+        param = PatchParam(user, parsed.agent, parsed.version)
+        patch_manager: PatchManager = request.app.state.patch_manager
+        result = patch_manager.patch(param, config)
 
-    return Response(
-        content=json_helper.dump_readable(result),
-        media_type="application/json",
-    )
+        return Response(
+            content=json_helper.dump_readable(result),
+            media_type="application/json",
+        )
+    except Exception:
+        logger.exception("Unexpected error encountered")
+
+    return http_helper.get_uniform_reject()
 
 
 async def _auth(

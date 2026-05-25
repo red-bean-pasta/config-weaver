@@ -23,13 +23,15 @@ class HttpAuthRevokeMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         logger.warning("Received request sent in plaintext HTTP")
+        try:
+            async for cred in _validate_request_creds(request):
+                logger.warning("Revoking exposed credentials...")
+                revoke_cred(request.app.state.auth_manager, cred)
 
-        async for cred in _validate_request_creds(request):
-            logger.warning("Revoking exposed credentials...")
-            revoke_cred(request.app.state.auth_manager, cred)
-
-        if await _validate_encryption_key(request):
-            logger.warning("Encryption key LEAKED. Consider rotating it as soon as possible")
+            if await _validate_encryption_key(request):
+                logger.warning("Encryption key LEAKED. Consider rotating it as soon as possible")
+        except Exception:
+            logger.exception(f"Unexpected error encountered")
 
         return http_helper.get_uniform_reject()
 
