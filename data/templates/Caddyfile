@@ -2,11 +2,10 @@
     acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 }
 
-https://some.example.com:PORT {
+some.example.com:PORT {
 
     @config_weaver {
         path /some-path
-        path /some-path/*
     }
 
     handle @config_weaver {
