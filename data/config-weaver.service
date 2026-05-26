@@ -9,7 +9,7 @@ StartLimitIntervalSec=60
 Type=simple
 EnvironmentFile=/etc/config-weaver/config-weaver.env
 WorkingDirectory=/opt/config-weaver
-ExecStart=/opt/config-weaver/venv/bin/config-weaver serve
+ExecStart=/opt/config-weaver/bin/config-weaver
 Restart=on-failure
 RestartSec=5
 
