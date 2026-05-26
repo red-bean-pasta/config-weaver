@@ -9,11 +9,16 @@ StartLimitIntervalSec=60
 Type=simple
 EnvironmentFile=/etc/config-weaver/config-weaver.env
 WorkingDirectory=/opt/config-weaver
-ExecStart=/opt/config-weaver/bin/config-weaver
+ExecStart=/opt/config-weaver/bin/config-weaver serve
 Restart=on-failure
 RestartSec=5
 
 DynamicUser=yes
+
+StateDirectory=config-weaver
+CacheDirectory=config-weaver
+LogsDirectory=config-weaver
+
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
