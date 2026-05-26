@@ -21,7 +21,12 @@ def build(args: argparse.Namespace) -> None:
         args.agent,
         args.version
     )
+
     result = builder.build(args.spec_dir, param, args.key)
+
+    if not result:
+        return
+
     dump = json_helper.dump_readable(result)
     if args.output_path:
         file_operator.save(dump.encode("utf-8"), Path(args.output_path))

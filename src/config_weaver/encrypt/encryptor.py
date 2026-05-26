@@ -3,7 +3,7 @@ import hashlib
 import logging
 from pathlib import Path
 
-from cryptography.fernet import Fernet, InvalidToken
+from cryptography.fernet import Fernet
 
 
 logger = logging.getLogger(__name__)
@@ -44,10 +44,7 @@ def decrypt_file(key: str, data: bytes) -> bytes | None:
     # which Fernet skips, resulting in timing difference
     key_hash = hashlib.sha256(key.encode()).digest()
     work_key = base64.urlsafe_b64encode(key_hash)
-    try:
-        return Fernet(work_key).decrypt(data)
-    except (InvalidToken, ValueError):
-        return None
+    return Fernet(work_key).decrypt(data)
 
 
 def _dummy_decrypt(data: bytes) -> None:

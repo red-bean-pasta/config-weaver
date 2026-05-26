@@ -1,5 +1,12 @@
+import logging
+
+from cryptography.fernet import InvalidToken
+
 from config_weaver.encrypt import encryptor
 from config_weaver.file_managers.file_data import FileData
+
+
+logger = logging.getLogger(__name__)
 
 
 class ConfigManager(FileData):
@@ -7,9 +14,14 @@ class ConfigManager(FileData):
         encrypted = self.get_content()
 
         if not encrypted:
-            raise FileNotFoundError(f"Base config not found: {self.path}")
+            logger.error(f"Base config not found: {self.path}")
+            return None
 
-        return encryptor.decrypt_file(
-            encryption_key,
-            encrypted
-        )
+        try:
+            return encryptor.decrypt_file(
+                encryption_key,
+                encrypted
+            )
+        except InvalidToken:
+            logger.error(f"Invalid encryption key or base ciphertext")
+            return None

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from config_weaver.utils import file_operator
 from config_weaver.encrypt import encryptor
+from config_weaver.file_managers.config_manager import ConfigManager
 
 
 logger = logging.getLogger(__name__)
@@ -19,18 +20,13 @@ def edit(
     file = Path(path)
     folder = file.parent
 
-    logger.info(f"Loading {file}...")
-    encrypted = file_operator.read_bytes(file)
-    if encrypted is None:
-        logger.error(f"Failed to load file {file}. Does file exist?")
+    config_manager = ConfigManager(file)
+    decrypted_bytes = config_manager.decrypt(decryption_key)
+    if not decrypted_bytes:
+        logger.error(f"Failed to decrypt {file}")
         sys.exit(1)
 
-    logger.info(f"Decrypting {file}...")
-    decrypted = encryptor.decrypt_file(decryption_key, encrypted)
-    if decrypted is None:
-        logger.error(f"Failed to decrypt {file}. Is the key valid?")
-        sys.exit(1)
-    decrypted = decrypted.decode("utf-8")
+    decrypted = decrypted_bytes.decode("utf-8")
 
     try:
         tmp = file_operator.save_to_temp_file(folder, decrypted)
