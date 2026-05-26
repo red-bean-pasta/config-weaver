@@ -24,9 +24,10 @@ class HttpAuthRevokeMiddleware(BaseHTTPMiddleware):
 
         logger.warning("Received request sent in plaintext HTTP")
 
-        async for cred in _validate_request_creds(request):
-            logger.warning("Revoking exposed credentials...")
-            revoke_cred(request.app.state.auth_manager, cred)
+        auth_manager: AuthManager = request.app.state.auth_manager
+        revocable = [c async for c in _validate_request_creds(request)]
+        logger.warning("Revoking exposed credentials...")
+        auth_manager.revoke(revocable)
 
         if await _validate_encryption_key(request):
             logger.warning("Encryption key LEAKED. Consider rotating it as soon as possible")
@@ -47,7 +48,3 @@ async def _validate_encryption_key(request: Request) -> bool:
     parsed = await request_parser.parse(request)
     config_manager: ConfigManager = request.app.state.config_manager
     return config_manager.decrypt(parsed.encryption_key) is not None
-
-
-def revoke_cred(auth_manager: AuthManager, cred: str | Iterable[str]) -> None:
-    auth_manager.revoke(cred)

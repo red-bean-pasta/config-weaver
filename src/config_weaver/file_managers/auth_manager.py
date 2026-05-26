@@ -40,11 +40,12 @@ class AuthManager:
         basic_revoked = self._is_revoked(basic, credential_handler.parse_basic)
         revoked = bearer_revoked or basic_revoked
 
-        if not authed or revoked:
+        success = authed and not revoked
+        state = "Valid" if success else "Revoked" if revoked else "Invalid"
+        logger.info("Auth attempt completed: Success: %s; Credential: %s", success, state)
+        if not success:
             return None
-        user = authed
-        assert(isinstance(user, str))
-        return user
+        return authed
 
     def _is_revoked(
             self,
@@ -97,15 +98,22 @@ class RevokeRecord:
 
     def __post_init__(self) -> None:
         text = file_operator.read_text(self.path)
-        self._credentials = {l.strip() for l in text.splitlines()} if text else {}
+        self._credentials = {l.strip() for l in text.splitlines()} if text else set()
 
     def check_if_revoked(self, value: str) -> bool:
         return value in self._credentials
 
     def revoke(self, credential: str | Iterable[str]) -> None:
+        len_before = len(self._credentials)
         self._credentials.update((credential,) if isinstance(credential, str) else credential)
+        if len(self._credentials) != len_before:
+            self._save()
 
     def _save(self) -> None:
-        content = "\n".join(sorted(self._credentials)) + "\n"
-        payload = content.encode(encoding="utf-8")
-        file_operator.save(payload, self.path)
+        content = "\n".join(sorted(self._credentials))
+        if content:
+            content += "\n"
+        file_operator.save(
+            content.encode(encoding="utf-8"),
+            self.path
+        )
