@@ -23,9 +23,9 @@ class PatchManager:
     _version_spec: FileData | None
 
     _ordered_patcher = {
-        "user": user_patcher.patch,
         "agent": agent_patcher.patch,
         "version": version_patcher.patch,
+        "user": user_patcher.patch,
     }
 
     def __init__(

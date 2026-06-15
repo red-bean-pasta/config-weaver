@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Callable, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
@@ -6,6 +7,9 @@ import config_weaver.patch.base.filter as strain
 from config_weaver.utils.json_helper import JsonValue, as_list
 from config_weaver.patch.base import selector, modifier, inserter, replacer
 from config_weaver.patch.base.schemas import Select, Filter, Replace, Modify, Insert
+
+
+logger = logging.getLogger(__name__)
 
 
 class PatchNode(BaseModel):
@@ -49,9 +53,9 @@ class PatchNode(BaseModel):
     ordered_directives: dict[str, Callable[[list[BaseModel], JsonValue], JsonValue]] = {
         'filter': strain.apply_filters,
         'select': selector.apply_selects,
-        'replace': replacer.apply_replaces,
-        'modify': modifier.apply_modifies,
         'insert': inserter.apply_inserts,
+        'modify': modifier.apply_modifies,
+        'replace': replacer.apply_replaces,
     }
     def patch(self, target: JsonValue) -> JsonValue:
         result = target
@@ -59,5 +63,9 @@ class PatchNode(BaseModel):
             if values := getattr(self, directive):
                 result = func(values, result)
         for key, child in self.children.items():
+            assert(isinstance(result, list) and isinstance(key, int) or isinstance(result, dict) and isinstance(key, str))
+            if key not in result:
+                logger.warning(f"Skip patching on key '{key}': Not found")
+                continue
             result[key] = child.patch(result[key])
         return result
