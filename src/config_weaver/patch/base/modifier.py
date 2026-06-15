@@ -69,9 +69,7 @@ def _modify_array(
         targets: list[JsonObject] | JsonObject
 ) -> list[JsonObject]:
     result = list(targets) if isinstance(targets, list) else [targets]
-    selection = _apply_to(modify.to, targets)
-    if not selection:
-        return result
+    selection = _apply_to(modify.to, targets) if modify.to else range(len(result))
     for i in selection:
         result[i] = _apply_operations(modify, result[i])
     return result
@@ -107,11 +105,9 @@ def _apply_not(
 
 
 def _apply_to(
-        to_: list[Locator] | None,
+        to_: list[Locator],
         targets: list[JsonObject]
-) -> list[int] | None:
-    if to_ is None:
-        return None
+) -> list[int]:
     return locator.apply_locators(to_, targets)
 
 
