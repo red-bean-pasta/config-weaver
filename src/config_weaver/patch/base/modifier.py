@@ -38,13 +38,19 @@ def _validate(
     t_object = isinstance(target, dict)
     t_array = (isinstance(target, list) and all(isinstance(i, dict) for i in target)
                or isinstance(target, dict))
+
     if m_object and m_array:
         raise AssertionError("Modifying with both `if`/`not` and `to` defined")
     if m_object and not t_object:
         raise ValueError(f"Trying to apply `if` and `not` on field of invalid type: {type(target)}")
     if m_array and not t_array:
         raise ValueError(f"Trying to apply `to` on field of invalid type: {type(target)}")
-    return m_object
+
+    if m_array:
+        return False
+    if m_object or t_object:
+        return True
+    return False
 
 
 def _modify_object(
