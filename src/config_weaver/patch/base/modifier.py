@@ -64,6 +64,8 @@ def _modify_array(
 ) -> list[JsonObject]:
     result = list(targets) if isinstance(targets, list) else [targets]
     selection = _apply_to(modify.to, targets)
+    if not selection:
+        return result
     for i in selection:
         result[i] = _apply_operations(modify, result[i])
     return result
