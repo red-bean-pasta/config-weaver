@@ -26,7 +26,7 @@ def apply_locate(
         locator: Locator,
         targets: list[JsonObject],
 ) -> list[int]:
-    result = range(len(targets))
+    result = list(range(len(targets)))
     for attr, func in _ordered_locators.items():
         if (value := getattr(locator, attr)) is not None:
             result = func(value, targets, result)
