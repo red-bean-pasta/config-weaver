@@ -334,8 +334,7 @@ config-weaver build \
   --spec-dir ./spec \
   --user someone \
   --agent some-agent \
-  --version 1.2.3 \
-  --key 'my-decryption-key'
+  --version 1.2.3
 ```
 ### 5. Serve
 ```bash

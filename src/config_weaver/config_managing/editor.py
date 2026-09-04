@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def edit(
         path: Path | str,
         decryption_key: str,
-        editor_command: str,
+        editor_command: str = "nano",
 ) -> None:
     file = Path(path)
     folder = file.parent

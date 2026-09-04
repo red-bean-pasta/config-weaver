@@ -134,9 +134,6 @@ def _setup_build_parser(subparsers):
         "-v", "--version",
         default=None,
         help="Client version to build for")
-    parser.add_argument(
-        "-k", "--key",
-        help="Key used decrypt base.json.enc")
     _add_log_arg(parser)
     parser.set_defaults(func=arg_funcs.build)
 
@@ -166,10 +163,6 @@ def _setup_encrypt_parsers(subparsers):
         type=Path,
         metavar="PATH",
         help="Path to the encrypted file")
-    edit.add_argument(
-        "key",
-        metavar="KEY",
-        help="Decryption key")
     edit.add_argument(
         "-e", "--editor-command",
         metavar="COMMAND",

@@ -1,4 +1,6 @@
 import argparse
+import getpass
+import sys
 from pathlib import Path
 
 from config_weaver.config_managing import secret_generator
@@ -22,7 +24,13 @@ def build(args: argparse.Namespace) -> None:
         args.version
     )
 
-    result = builder.build(args.spec_dir, param, args.key)
+    try:
+        key = getpass.getpass("Enter decryption key: ")
+    except (KeyboardInterrupt, EOFError):
+        print()
+        return
+
+    result = builder.build(args.spec_dir, param, key)
 
     if not result:
         return
@@ -40,7 +48,12 @@ def encrypt(args: argparse.Namespace) -> None:
 
 
 def edit(args: argparse.Namespace) -> None:
-    editor.edit(args.path, args.key, args.editor_command)
+    try:
+        key = getpass.getpass("Enter decryption key: ")
+    except (KeyboardInterrupt, EOFError):
+        print()
+        sys.exit(1)
+    editor.edit(args.path, key, args.editor_command)
 
 
 def hash(args: argparse.Namespace) -> None:
