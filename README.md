@@ -121,7 +121,7 @@ On top of json-config-patch, each context defines its own selector key:
 
 The selector key must be present in each rule. A rule is selected only if its selector matches the current request context. 
 
-Execution order: `user_rules.json > agent_rules.json > version_rules.json`
+Execution order: `agent_rules.json > version_rules.json > user_rules.json`
 
 **Examples**:
 `user_rules.json`
@@ -316,21 +316,21 @@ uv tool install git+https://github.com/red-bean-pasta/config-weaver.git
 ## Quickstart
 ### 1. Encrypt a base config
 ```bash
-config_weaver encrypt ./base.json ./spec/base.json.enc
+config-weaver encrypt ./base.json ./spec/base.json.enc
 ```
 ### 2. Generate a credential or token
 ```bash
-config_weaver generate
+config-weaver generate
 ```
 ### 3. Hash credentials for auth rules
 ```bash
-config_weaver hash [my-password]
-config_weaver hash [my-bearer-secret]
+config-weaver hash [my-password]
+config-weaver hash [my-bearer-secret]
 ```
 Put the generated hashes into `auth_rules.json`.
 ### 4. Build locally
 ```bash
-config_weaver build \
+config-weaver build \
   --spec-dir ./spec \
   --user someone \
   --agent some-agent \
@@ -339,7 +339,7 @@ config_weaver build \
 ```
 ### 5. Serve
 ```bash
-config_weaver serve \
+config-weaver serve \
   --spec-dir ./spec \
   --state-dir ./state \
   --host 127.0.0.1 \
@@ -347,7 +347,7 @@ config_weaver serve \
 ```
 Pass extra arguments through to uvicorn after `--`:
 ```bash
-config_weaver serve \
+config-weaver serve \
   --spec-dir ./spec \
   --state-dir ./state \
   --port 8000 \
@@ -356,7 +356,7 @@ config_weaver serve \
 
 See more about each command, use:
 ```bash
-config_weaver -h
+config-weaver -h
 ```
 
 ---
